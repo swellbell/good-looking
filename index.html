@@ -1,0 +1,103 @@
+<!-- P&L -->
+<div id="pl" class="section">
+  <div class="section-header">
+    <h2>Smarsh 2026 Product P&L</h2>
+    <div class="line"></div>
+    <span class="badge">Tab 6 of 7</span>
+  </div>
+
+  <!-- SUMMARY STATS -->
+  <div class="stat-row">
+    <div class="stat-chip"><span class="num">$439.5M</span><span class="label">Total Revenue (FCST)</span></div>
+    <div class="stat-chip"><span class="num">$193.3M</span><span class="label">Total Expenses (FCST)</span></div>
+    <div class="stat-chip"><span class="num">$246.2M</span><span class="label">Total Profit (FCST)</span></div>
+    <div class="stat-chip"><span class="num">56.0%</span><span class="label">Overall Margin (FCST)</span></div>
+    <div class="stat-chip"><span class="num">+$0.7M</span><span class="label">Revenue vs. Budget</span></div>
+  </div>
+
+  <!-- PRODUCT TABLE -->
+  <div class="card" style="margin-bottom:14px;">
+    <div class="card-title">FY26 Current Forecast by Product — All figures in $thousands</div>
+    <table style="width:100%;border-collapse:collapse;font-size:13px;">
+      <thead>
+        <tr style="border-bottom:2px solid #D1DDE5;">
+          <th style="text-align:left;padding:8px 10px;color:var(--muted);font-family:var(--mono);font-size:11px;font-weight:600;">Product</th>
+          <th style="text-align:right;padding:8px 10px;color:var(--muted);font-family:var(--mono);font-size:11px;font-weight:600;">Revenue</th>
+          <th style="text-align:right;padding:8px 10px;color:var(--muted);font-family:var(--mono);font-size:11px;font-weight:600;">Expenses</th>
+          <th style="text-align:right;padding:8px 10px;color:var(--muted);font-family:var(--mono);font-size:11px;font-weight:600;">Profit</th>
+          <th style="text-align:right;padding:8px 10px;color:var(--muted);font-family:var(--mono);font-size:11px;font-weight:600;">Margin</th>
+          <th style="text-align:right;padding:8px 10px;color:var(--muted);font-family:var(--mono);font-size:11px;font-weight:600;">vs Budget</th>
+          <th style="text-align:right;padding:8px 10px;color:var(--muted);font-family:var(--mono);font-size:11px;font-weight:600;">YoY Rev</th>
+          <th style="padding:8px 10px;width:120px;color:var(--muted);font-family:var(--mono);font-size:11px;font-weight:600;">Margin Bar</th>
+        </tr>
+      </thead>
+      <tbody id="pl-tbody">
+      </tbody>
+      <tfoot>
+        <tr style="border-top:2px solid #D1DDE5;background:#EAF3F9;">
+          <td style="padding:9px 10px;font-weight:800;font-family:var(--mono);font-size:12px;color:#170035;">TOTAL</td>
+          <td style="text-align:right;padding:9px 10px;font-weight:700;font-family:var(--mono);color:var(--accent);">$439,520</td>
+          <td style="text-align:right;padding:9px 10px;font-weight:700;font-family:var(--mono);color:#170035;">$193,349</td>
+          <td style="text-align:right;padding:9px 10px;font-weight:700;font-family:var(--mono);color:var(--green);">$246,171</td>
+          <td style="text-align:right;padding:9px 10px;font-weight:700;font-family:var(--mono);color:var(--accent);">56.0%</td>
+          <td style="text-align:right;padding:9px 10px;font-weight:700;font-family:var(--mono);color:var(--gold);">+$674</td>
+          <td style="text-align:right;padding:9px 10px;font-weight:700;font-family:var(--mono);color:#ED4F63;">-$17,022</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <!-- CHARTS ROW -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Revenue Mix — FY26 FCST ($K)</div>
+      <canvas id="revChart" height="220"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">Margin by Product — FY26 FCST</div>
+      <canvas id="marginChart" height="220"></canvas>
+    </div>
+  </div>
+
+  <!-- QUARTERLY TREND -->
+  <div class="card" style="margin-top:12px;">
+    <div class="card-title">Quarterly Revenue Progression — FY26 FCST ($K)</div>
+    <canvas id="qChart" height="160"></canvas>
+  </div>
+
+  <!-- WINNERS / WATCH LIST -->
+  <div class="grid-2" style="margin-top:12px;">
+    <div class="card" style="border-color:#00BC9E;">
+      <div class="card-title" style="color:var(--green);">High Performers</div>
+      <table class="ref-table">
+        <tr><td>Professional Archive</td><td style="color:var(--green);font-weight:600;text-align:right;">76.3% margin · $104.4M rev</td></tr>
+        <tr><td>Digital Safe</td><td style="color:var(--green);font-weight:600;text-align:right;">68.5% margin · $66.1M rev · +$2.6M vs budget</td></tr>
+        <tr><td>Enterprise Archive</td><td style="color:var(--green);font-weight:600;text-align:right;">67.2% margin · $106.9M rev · strong YoY +31%</td></tr>
+        <tr><td>Desktop</td><td style="color:var(--green);font-weight:600;text-align:right;">56.4% margin — solid despite vol decline</td></tr>
+      </table>
+    </div>
+    <div class="card" style="border-color:#ED4F63;">
+      <div class="card-title" style="color:var(--red);">Watch List</div>
+      <table class="ref-table">
+        <tr><td>Mobile</td><td style="color:#ED4F63;font-weight:600;text-align:right;">20.6% margin · -16% YoY rev decline</td></tr>
+        <tr><td>Conduct</td><td style="color:#ED4F63;font-weight:600;text-align:right;">23.9% margin · -10% YoY · Q2/Q3 negative profit</td></tr>
+        <tr><td>Capture</td><td style="color:#ED4F63;font-weight:600;text-align:right;">30.0% margin · -23% YoY — sharpest volume drop</td></tr>
+        <tr><td>Business Solutions</td><td style="color:#ED4F63;font-weight:600;text-align:right;">40.3% margin · -10% YoY rev decline</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- KEY TAKEAWAYS FOR INTERVIEW -->
+  <div class="card" style="margin-top:12px;background:linear-gradient(135deg,#DCE8F2,#EAF3F9);border-color:var(--accent);">
+    <div class="card-title">P&L Narrative — How This Connects to Your TTD Story</div>
+    <div class="grid-2" style="margin-top:6px;gap:16px;">
+      <div>
+        <p style="font-size:13px;line-height:1.7;"><strong style="color:var(--accent);">You own this exact operating challenge at Smarsh.</strong> Total revenue is down 3.7% YoY while the portfolio has high-margin anchors (PA at 76%, DS at 68%, EA at 67%) subsidizing structurally challenged products (Mobile at 20%, Conduct at 24%, Capture at 30%). This is precisely the cross-functional problem you solved at IAS — aligning roadmaps to P&L accountability, forcing capacity tradeoffs against actual contribution margin.</p>
+      </div>
+      <div>
+        <p style="font-size:13px;line-height:1.7;"><strong style="color:var(--gold);">The story to tell if it comes up:</strong> I built the systems that make this portfolio legible — OKRs tied to P&L lines, roadmap health dashboards, quarterly reviews where Product and Finance share the same numbers. When Mobile is at 20% margin and declining, the governance structure has to force a decision based on contribution margin, not inertia. That's the work I do. The delivery speed result — cutting cycle time from 90 to 72 days — was a byproduct of that operating discipline, not the goal itself.</p>
+      </div>
+    </div>
+  </div>
+</div>
