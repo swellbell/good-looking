@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2026 Product P&L</title>
+<title>Smarsh 2026 Product P&L — Rennie Filler</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
@@ -17,10 +17,8 @@
     font-size: 14px;
     line-height: 1.5;
     min-height: 100vh;
-    padding: 0;
   }
 
-  /* ── TOPBAR ── */
   .topbar {
     background: #170035;
     border-bottom: 3px solid #1500FF;
@@ -28,108 +26,102 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    position: sticky; top: 0; z-index: 100;
   }
   .topbar-title { font-weight: 800; font-size: 14px; color: #ffffff; letter-spacing: -0.01em; }
   .topbar-sub   { font-size: 11px; color: #C6C9E0; margin-top: 1px; }
   .badge {
-    background: #00D7D9;
-    color: #170035;
-    font-size: 10px;
-    font-weight: 800;
-    padding: 3px 9px;
-    border-radius: 3px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    background: #00D7D9; color: #170035;
+    font-size: 10px; font-weight: 800;
+    padding: 3px 9px; border-radius: 3px;
+    letter-spacing: 0.06em; text-transform: uppercase;
   }
 
-  /* ── CONTAINER ── */
   .container { max-width: 1100px; margin: 0 auto; padding: 24px 20px; }
 
-  /* ── SECTION HEADER ── */
   .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-  .section-header h2 { font-size: 18px; font-weight: 800; color: #FFFFFF; letter-spacing: -0.02em; white-space: nowrap; }
+  .section-header h2 { font-size: 18px; font-weight: 800; color: #170035; letter-spacing: -0.02em; white-space: nowrap; }
   .section-header .line {
-    flex: 1;
-    height: 2px;
+    flex: 1; height: 2px;
     background: linear-gradient(90deg, #1500FF, #00D7D9, transparent);
     border-radius: 2px;
   }
 
-  /* ── STAT CHIPS ── */
-  .stat-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+  .stat-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
   .stat-chip {
-    background: #ffffff;
-    border: 1px solid #D1DDE5;
-    border-top: 3px solid #1500FF;
-    border-radius: 8px;
-    padding: 12px 16px;
-    flex: 1;
-    min-width: 140px;
-    text-align: center;
+    background: #ffffff; border: 1px solid #D1DDE5; border-top: 3px solid #1500FF;
+    border-radius: 8px; padding: 12px 16px;
+    flex: 1; min-width: 140px; text-align: center;
     box-shadow: 0 1px 4px rgba(21,0,255,0.07);
   }
-  .stat-chip .num {
-    font-size: 22px;
-    font-weight: 800;
-    color: #1500FF;
-    display: block;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-  }
+  .stat-chip .num { font-size: 22px; font-weight: 800; color: #1500FF; display: block; letter-spacing: -0.02em; line-height: 1.2; }
   .stat-chip .label { font-size: 11px; color: #9FA4BC; font-weight: 500; margin-top: 2px; display: block; }
 
-  /* ── CARDS ── */
+  .footnote { font-size: 11px; color: #9FA4BC; margin-bottom: 16px; padding-left: 2px; }
+  .footnote span { color: #00D7D9; font-weight: 700; }
+
   .card {
-    background: #ffffff;
-    border: 1px solid #D1DDE5;
-    border-radius: 10px;
-    padding: 18px;
-    margin-bottom: 14px;
+    background: #ffffff; border: 1px solid #D1DDE5; border-radius: 10px;
+    padding: 18px; margin-bottom: 14px;
     box-shadow: 0 1px 4px rgba(21,0,255,0.07);
   }
   .card-title {
-    font-size: 10px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: #1500FF;
-    margin-bottom: 12px;
+    font-size: 10px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.12em; color: #1500FF; margin-bottom: 12px;
   }
 
-  /* ── GRID ── */
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   @media (max-width: 700px) { .grid-2 { grid-template-columns: 1fr; } }
 
-  /* ── PRODUCT TABLE ── */
+  /* TABLE */
   .pl-table { width: 100%; border-collapse: collapse; font-size: 13px; }
   .pl-table thead tr { border-bottom: 2px solid #D1DDE5; }
   .pl-table th {
-    padding: 8px 10px;
-    color: #9FA4BC;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    padding: 8px 10px; color: #9FA4BC; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em;
   }
   .pl-table th:first-child { text-align: left; }
   .pl-table th:not(:first-child):not(:last-child) { text-align: right; }
   .pl-table th:last-child { text-align: left; width: 110px; }
-  .pl-table tbody tr { border-bottom: 1px solid #EAF3F9; transition: background 0.1s; }
-  .pl-table tbody tr:hover { background: #EAF3F9; }
-  .pl-table td { padding: 9px 10px; font-weight: 500; }
+
+  /* Parent rows */
+  .row-parent { border-bottom: 1px solid #D1DDE5; }
+  .row-parent:hover { background: #f5f9fc; }
+  .row-parent td { padding: 10px 10px; font-weight: 700; color: #170035; }
+
+  /* Capture parent gets teal left border */
+  .row-capture td:first-child { border-left: 3px solid #00D7D9; padding-left: 9px; }
+
+  /* Child rows */
+  .row-child { border-bottom: 1px solid #EAF3F9; background: #fafcfd; }
+  .row-child:last-of-type { border-bottom: 2px solid #D1DDE5; }
+  .row-child:hover { background: #EAF3F9; }
+  .row-child td { padding: 6px 10px; font-size: 12px; font-weight: 500; color: #5a6080; }
+  .row-child td:first-child { padding-left: 30px; }
+
+  .child-prefix { color: #C6C9E0; margin-right: 4px; font-size: 12px; }
+  .child-tag {
+    font-size: 9px; font-weight: 700; color: #9FA4BC;
+    background: #EAF3F9; border: 1px solid #D1DDE5;
+    border-radius: 3px; padding: 1px 5px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    margin-left: 6px; vertical-align: middle;
+  }
+
   .pl-table td.num { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
-  .pl-table tfoot tr { border-top: 2px solid #D1DDE5; background: #EAF3F9; }
+  .row-child td.num { font-size: 12px; font-weight: 500; }
+
+  /* Footer */
+  .pl-table tfoot tr { border-top: 2px solid #170035; background: #EAF3F9; }
   .pl-table tfoot td { padding: 10px 10px; font-weight: 800; font-size: 13px; }
   .pl-table tfoot td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .pl-table tfoot td:first-child { border-left: 3px solid #1500FF; padding-left: 9px; }
 
-  /* margin bar */
+  /* Margin bar */
   .bar-track { background: #D1DDE5; border-radius: 4px; height: 8px; width: 100%; overflow: hidden; }
   .bar-fill  { height: 100%; border-radius: 4px; }
 
-  /* ── REF TABLE ── */
+  /* Ref table */
   .ref-table { width: 100%; border-collapse: collapse; }
   .ref-table tr { border-bottom: 1px solid #EAF3F9; }
   .ref-table tr:last-child { border-bottom: none; }
@@ -137,45 +129,38 @@
   .ref-table td:first-child { color: #9FA4BC; font-size: 11px; font-weight: 600; white-space: nowrap; width: 160px; padding-top: 9px; }
   .ref-table td:last-child { font-weight: 600; text-align: right; }
 
-  /* ── NARRATIVE CARD ── */
+  /* Narrative */
   .narrative-card {
     background: linear-gradient(135deg, #DCE8F2, #EAF3F9);
-    border: 1px solid #00D7D9;
-    border-radius: 10px;
-    padding: 18px;
-    margin-top: 14px;
+    border: 1px solid #00D7D9; border-radius: 10px;
+    padding: 18px; margin-top: 14px;
   }
   .narrative-card .card-title { color: #1500FF; }
   .narrative-card p { font-size: 13px; line-height: 1.75; color: #170035; }
-  .narrative-card strong.a { color: #170035; }
+  .narrative-card strong.a { color: #1500FF; }
   .narrative-card strong.b { color: #00BC9E; }
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
-<div class="topbar">
-  <div>
-    <div class="topbar-title">good-looking</div>
+
 
 <div class="container">
 
-  <!-- HEADER -->
   <div class="section-header">
-    <h2>2026 Product P&L</h2>
+    <h2>Smarsh 2026 Product P&L</h2>
     <div class="line"></div>
   </div>
 
-  <!-- STAT CHIPS -->
   <div class="stat-row">
-    <div class="stat-chip"><span class="num">$439.5M</span><span class="label">Total Revenue (FCST)</span></div>
-    <div class="stat-chip"><span class="num">$193.3M</span><span class="label">Total Expenses (FCST)</span></div>
-    <div class="stat-chip"><span class="num">$246.2M</span><span class="label">Total Profit (FCST)</span></div>
-    <div class="stat-chip"><span class="num">56.0%</span><span class="label">Overall Margin (FCST)</span></div>
-    <div class="stat-chip"><span class="num" style="color:#00BC9E;">+$0.7M</span><span class="label">Revenue vs. Budget</span></div>
+    <div class="stat-chip"><span class="num">$383.6M</span><span class="label">Total Revenue (FCST)</span></div>
+    <div class="stat-chip"><span class="num">$156.2M</span><span class="label">Total Expenses (FCST)</span></div>
+    <div class="stat-chip"><span class="num">$227.4M</span><span class="label">Total Profit (FCST)</span></div>
+    <div class="stat-chip"><span class="num">59.3%</span><span class="label">Overall Margin (FCST)</span></div>
+    <div class="stat-chip"><span class="num" style="color:#00BC9E;">+$500K</span><span class="label">Revenue vs. Budget</span></div>
   </div>
+  <p class="footnote"><span>↳</span> Totals reflect 6 top-level products. Mobile &amp; Desktop are sub-components of Capture and are excluded to avoid double-counting.</p>
 
-  <!-- PRODUCT TABLE -->
   <div class="card">
     <div class="card-title">FY26 Current Forecast by Product — All figures in $thousands</div>
     <table class="pl-table">
@@ -194,20 +179,19 @@
       <tbody id="pl-tbody"></tbody>
       <tfoot>
         <tr>
-          <td style="color:#170035;">TOTAL</td>
-          <td class="num" style="color:#1500FF;">$439,520</td>
-          <td class="num" style="color:#9FA4BC;">$193,349</td>
-          <td class="num" style="color:#00BC9E;">$246,171</td>
-          <td class="num" style="color:#1500FF;">56.0%</td>
-          <td class="num" style="color:#00BC9E;">+$674</td>
-          <td class="num" style="color:#ED4F63;">−$17,022</td>
+          <td>TOTAL <span style="font-size:10px;font-weight:500;color:#9FA4BC;">6 products</span></td>
+          <td class="num" style="color:#1500FF;">$383,641</td>
+          <td class="num" style="color:#9FA4BC;">$156,203</td>
+          <td class="num" style="color:#00BC9E;">$227,436</td>
+          <td class="num" style="color:#1500FF;">59.3%</td>
+          <td class="num" style="color:#00BC9E;">+$500</td>
+          <td class="num" style="color:#ED4F63;">−$670</td>
           <td></td>
         </tr>
       </tfoot>
     </table>
   </div>
 
-  <!-- CHARTS -->
   <div class="grid-2">
     <div class="card">
       <div class="card-title">Revenue Mix — FY26 FCST</div>
@@ -224,50 +208,52 @@
     <canvas id="qChart" height="160"></canvas>
   </div>
 
-  <!-- HIGH PERFORMERS / WATCH LIST -->
   <div class="grid-2">
     <div class="card" style="border-top:3px solid #00BC9E;">
       <div class="card-title" style="color:#00BC9E;">High Performers</div>
       <table class="ref-table">
-        <tr><td>Pro Archive</td><td style="color:#00BC9E;">76.3% margin · $104.4M rev</td></tr>
+        <tr><td>Professional Archive</td><td style="color:#00BC9E;">76.3% margin · $104.4M rev</td></tr>
         <tr><td>Digital Safe</td><td style="color:#00BC9E;">68.5% margin · $66.1M rev · +$2.6M vs budget</td></tr>
         <tr><td>Enterprise Archive</td><td style="color:#00BC9E;">67.2% margin · $106.9M rev · +31% YoY</td></tr>
-        <tr><td>Desktop</td><td style="color:#00BC9E;">56.4% margin — solid despite vol decline</td></tr>
       </table>
     </div>
     <div class="card" style="border-top:3px solid #ED4F63;">
       <div class="card-title" style="color:#ED4F63;">Watch List</div>
       <table class="ref-table">
-        <tr><td>Mobile</td><td style="color:#ED4F63;">20.6% margin · −16% YoY rev</td></tr>
+        <tr><td>Capture → Mobile</td><td style="color:#ED4F63;">20.6% margin · −16% YoY</td></tr>
         <tr><td>Conduct</td><td style="color:#ED4F63;">23.9% margin · −10% YoY · Q2/Q3 negative profit</td></tr>
-        <tr><td>Capture</td><td style="color:#ED4F63;">30.0% margin · −23% YoY — sharpest drop</td></tr>
-        <tr><td>Business Solutions</td><td style="color:#ED4F63;">40.3% margin · −10% YoY rev</td></tr>
+        <tr><td>Capture (rollup)</td><td style="color:#ED4F63;">30.0% margin · −23% YoY — sharpest vol drop</td></tr>
+        <tr><td>Business Solutions</td><td style="color:#ED4F63;">40.3% margin · −10% YoY</td></tr>
       </table>
     </div>
   </div>
 
-  <!-- NARRATIVE -->
-  <div class="card" style="border-top:3px solid #00BC9E;">
-    <div class="card-title">P&L Narrative</div>
+  <div class="narrative-card">
+    <div class="card-title">P&L Narrative — How This Connects to Your TTD Story</div>
     <div class="grid-2" style="gap:20px;margin-top:4px;">
-      <p><strong class="a">Total revenue is down 3.7% YoY while the portfolio has high-margin anchors (PA at 76%, DS at 68%, EA at 67%) subsidizing structurally challenged products (Mobile at 20%, Conduct at 24%, Capture at 30%).</p> 
+      <p><strong class="a">You own this exact operating challenge at Smarsh.</strong> The portfolio has high-margin anchors (PA at 76%, DS at 68%, EA at 67%) subsidizing structurally challenged products — most visibly Capture, where Mobile at 20% margin is dragging the rollup to 30%. This is precisely the cross-functional problem you solved at IAS: aligning roadmaps to P&L accountability, forcing capacity tradeoffs against actual contribution margin.</p>
+      <p><strong class="b">The story to tell if it comes up:</strong> I built the systems that make this portfolio legible — OKRs tied to P&L lines, roadmap health dashboards, quarterly reviews where Product and Finance share the same numbers. When a sub-product like Mobile is at 20% margin and declining inside Capture, the governance structure has to surface that and force a decision based on contribution margin, not inertia. The delivery speed result — 90 to 72 days — was a byproduct of that discipline, not the goal itself.</p>
+    </div>
   </div>
 
-</div><!-- /container -->
+</div>
 
 <script>
-const PL = [
-  { name:'Pro Archive', rev:104372, exp:24771, profit:79601, margin:76.3, budget:104452, fy25:94119,  q:[24833,25350,26581,27608] },
-  { name:'Business Solutions',   rev:11162,  exp:6664,  profit:4498,  margin:40.3, budget:11523,  fy25:12346,  q:[2889,2813,2762,2699]   },
-  { name:'Enterprise Archive',   rev:106938, exp:35046, profit:71892, margin:67.2, budget:108474, fy25:81509,  q:[23220,24791,27021,31906] },
-  { name:'Capture',              rev:55879,  exp:39108, profit:16771, margin:30.0, budget:55703,  fy25:72212,  q:[12651,13708,14595,14925] },
-  { name:'Mobile',               rev:35726,  exp:28367, profit:7359,  margin:20.6, budget:35036,  fy25:42491,  q:[8086,8383,9135,10122]   },
-  { name:'Desktop',              rev:20153,  exp:8778,  profit:11375, margin:56.4, budget:20667,  fy25:29672,  q:[4565,5326,5459,4803]    },
-  { name:'Conduct',              rev:39195,  exp:29822, profit:9372,  margin:23.9, budget:39534,  fy25:43444,  q:[11389,6603,6946,14256]  },
-  { name:'Digital Safe',         rev:66095,  exp:20792, profit:45302, margin:68.5, budget:63455,  fy25:80681,  q:[17604,17158,16175,15157] },
+const PL_TOP = [
+  { name:'Professional Archive', short:'Prof Archive',  rev:104372, exp:24771, profit:79601, margin:76.3, budget:104452, fy25:94119,  q:[24833,25350,26581,27608] },
+  { name:'Business Solutions',   short:'Biz Solutions', rev:11162,  exp:6664,  profit:4498,  margin:40.3, budget:11523,  fy25:12346,  q:[2889,2813,2762,2699]    },
+  { name:'Enterprise Archive',   short:'Ent Archive',   rev:106938, exp:35046, profit:71892, margin:67.2, budget:108474, fy25:81509,  q:[23220,24791,27021,31906] },
+  { name:'Capture',              short:'Capture',       rev:55879,  exp:39108, profit:16771, margin:30.0, budget:55703,  fy25:72212,  q:[12651,13708,14595,14925] },
+  { name:'Conduct',              short:'Conduct',       rev:39195,  exp:29822, profit:9372,  margin:23.9, budget:39534,  fy25:43444,  q:[11389,6603,6946,14256]   },
+  { name:'Digital Safe',         short:'Digital Safe',  rev:66095,  exp:20792, profit:45302, margin:68.5, budget:63455,  fy25:80681,  q:[17604,17158,16175,15157] },
 ];
 
-const PALETTE = ['#1500FF','#00D7D9','#00BC9E','#9FA4BC','#ED4F63','#170035','#7B61FF','#00A8AA'];
+const CAPTURE_CHILDREN = [
+  { name:'Mobile',  rev:35726, exp:28367, profit:7359,  margin:20.6, budget:35036, fy25:42491 },
+  { name:'Desktop', rev:20153, exp:8778,  profit:11375, margin:56.4, budget:20667, fy25:29672 },
+];
+
+const PALETTE = ['#1500FF','#9FA4BC','#00BC9E','#00D7D9','#170035','#7B61FF'];
 
 function mColor(m) {
   if (m >= 65) return '#00BC9E';
@@ -276,83 +262,75 @@ function mColor(m) {
   return '#ED4F63';
 }
 
-// BUILD TABLE
-const tbody = document.getElementById('pl-tbody');
-PL.forEach(p => {
-  const vsBud = p.rev - p.budget;
-  const yoy   = p.rev - p.fy25;
+function buildRow(p, isChild) {
+  const vsBud  = p.rev - p.budget;
+  const yoy    = p.rev - p.fy25;
   const yoyPct = (yoy / p.fy25 * 100).toFixed(1);
-  const mc = mColor(p.margin);
-  tbody.innerHTML += `
-    <tr>
-      <td style="font-weight:600;color:#170035;">${p.name}</td>
-      <td class="num" style="color:#1500FF;">$${p.rev.toLocaleString()}</td>
-      <td class="num" style="color:#9FA4BC;">$${p.exp.toLocaleString()}</td>
-      <td class="num" style="color:#00BC9E;">$${p.profit.toLocaleString()}</td>
-      <td class="num" style="color:${mc};font-weight:700;">${p.margin}%</td>
-      <td class="num" style="color:${vsBud>=0?'#00BC9E':'#ED4F63'};">${vsBud>=0?'+':''}$${vsBud.toLocaleString()}</td>
-      <td class="num" style="color:${yoy>=0?'#00BC9E':'#ED4F63'};">${yoy>=0?'+':''}${yoyPct}%</td>
-      <td style="padding:9px 10px 9px 8px;">
-        <div class="bar-track"><div class="bar-fill" style="width:${Math.round(p.margin)}%;background:${mc};"></div></div>
-      </td>
-    </tr>`;
+  const mc     = mColor(p.margin);
+  const barW   = Math.round(p.margin);
+
+  const nameCell = isChild
+    ? `<td><span class="child-prefix">└</span>${p.name}<span class="child-tag">sub</span></td>`
+    : `<td>${p.name}</td>`;
+
+  const rowClass = isChild ? 'row-child' : (p.name === 'Capture' ? 'row-parent row-capture' : 'row-parent');
+  const numCol   = isChild ? '#7a84a8' : '#1500FF';
+
+  return `<tr class="${rowClass}">
+    ${nameCell}
+    <td class="num" style="color:${numCol};">$${p.rev.toLocaleString()}</td>
+    <td class="num" style="color:#9FA4BC;">$${p.exp.toLocaleString()}</td>
+    <td class="num" style="color:#00BC9E;">$${p.profit.toLocaleString()}</td>
+    <td class="num" style="color:${mc};font-weight:${isChild?600:700};">${p.margin}%</td>
+    <td class="num" style="color:${vsBud>=0?'#00BC9E':'#ED4F63'};">${vsBud>=0?'+':'-'}$${Math.abs(vsBud).toLocaleString()}</td>
+    <td class="num" style="color:${yoy>=0?'#00BC9E':'#ED4F63'};">${yoy>=0?'+':''}${yoyPct}%</td>
+    <td style="padding:9px 10px 9px 8px;">
+      <div class="bar-track"><div class="bar-fill" style="width:${barW}%;background:${mc};"></div></div>
+    </td>
+  </tr>`;
+}
+
+const tbody = document.getElementById('pl-tbody');
+PL_TOP.forEach(p => {
+  tbody.innerHTML += buildRow(p, false);
+  if (p.name === 'Capture') {
+    CAPTURE_CHILDREN.forEach(c => { tbody.innerHTML += buildRow(c, true); });
+  }
 });
 
-// BUILD CHARTS
 window.addEventListener('load', () => {
   Chart.defaults.font.family = "'Manrope', sans-serif";
   Chart.defaults.color       = '#9FA4BC';
   Chart.defaults.borderColor = '#D1DDE5';
 
-  const byMargin = [...PL].sort((a,b) => b.margin - a.margin);
+  const byMargin = [...PL_TOP].sort((a,b) => b.margin - a.margin);
 
-  // Doughnut — revenue mix
+  // Doughnut
   new Chart(document.getElementById('revChart'), {
     type: 'doughnut',
     data: {
-      labels: PL.map(p => p.name.replace(' Archive','').replace(' Solutions','')),
-      datasets: [{
-        data: PL.map(p => p.rev),
-        backgroundColor: PALETTE,
-        borderColor: '#ffffff',
-        borderWidth: 2,
-        hoverOffset: 6
-      }]
+      labels: PL_TOP.map(p => p.short),
+      datasets: [{ data: PL_TOP.map(p => p.rev), backgroundColor: PALETTE, borderColor: '#ffffff', borderWidth: 2, hoverOffset: 6 }]
     },
     options: {
-      responsive: true,
-      cutout: '62%',
+      responsive: true, cutout: '62%',
       plugins: {
-        legend: {
-          position: 'right',
-          labels: { font: { size: 11, weight: '600' }, padding: 10, boxWidth: 12, color: '#170035' }
-        },
-        tooltip: {
-          callbacks: { label: ctx => ` $${(ctx.parsed/1000).toFixed(1)}M (${(ctx.parsed/439520*100).toFixed(1)}%)` }
-        }
+        legend: { position: 'right', labels: { font: { size: 11, weight: '600' }, padding: 10, boxWidth: 12, color: '#170035' } },
+        tooltip: { callbacks: { label: ctx => ` $${(ctx.parsed/1000).toFixed(1)}M (${(ctx.parsed/383641*100).toFixed(1)}%)` } }
       }
     }
   });
 
-  // Horizontal bar — margin ranked
+  // Margin bar
   new Chart(document.getElementById('marginChart'), {
     type: 'bar',
     data: {
-      labels: byMargin.map(p => p.name.replace(' Archive','').replace(' Solutions','')),
-      datasets: [{
-        data: byMargin.map(p => p.margin),
-        backgroundColor: byMargin.map(p => mColor(p.margin)),
-        borderRadius: 4,
-        borderWidth: 0
-      }]
+      labels: byMargin.map(p => p.short),
+      datasets: [{ data: byMargin.map(p => p.margin), backgroundColor: byMargin.map(p => mColor(p.margin)), borderRadius: 4, borderWidth: 0 }]
     },
     options: {
-      indexAxis: 'y',
-      responsive: true,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.x}%` } }
-      },
+      indexAxis: 'y', responsive: true,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.x}%` } } },
       scales: {
         x: { min: 0, max: 100, ticks: { callback: v => v+'%', font: { size: 11 } }, grid: { color: '#EAF3F9' } },
         y: { ticks: { font: { size: 11, weight: '500' }, color: '#170035' }, grid: { display: false } }
@@ -360,30 +338,18 @@ window.addEventListener('load', () => {
     }
   });
 
-  // Stacked bar — quarterly
+  // Stacked quarterly
   new Chart(document.getElementById('qChart'), {
     type: 'bar',
     data: {
       labels: ['Q1','Q2','Q3','Q4'],
-      datasets: PL.map((p,i) => ({
-        label: p.name.split(' ')[0],
-        data: p.q,
-        backgroundColor: PALETTE[i],
-        borderWidth: 0,
-        borderRadius: 2
-      }))
+      datasets: PL_TOP.map((p,i) => ({ label: p.short, data: p.q, backgroundColor: PALETTE[i], borderWidth: 0, borderRadius: 2 }))
     },
     options: {
       responsive: true,
       plugins: {
-        legend: {
-          position: 'right',
-          labels: { font: { size: 11, weight: '600' }, padding: 8, boxWidth: 12, color: '#170035' }
-        },
-        tooltip: {
-          mode: 'index',
-          callbacks: { label: ctx => ` ${ctx.dataset.label}: $${(ctx.parsed.y/1000).toFixed(1)}M` }
-        }
+        legend: { position: 'right', labels: { font: { size: 11, weight: '600' }, padding: 8, boxWidth: 12, color: '#170035' } },
+        tooltip: { mode: 'index', callbacks: { label: ctx => ` ${ctx.dataset.label}: $${(ctx.parsed.y/1000).toFixed(1)}M` } }
       },
       scales: {
         x: { stacked: true, grid: { display: false }, ticks: { font: { size: 12, weight: '600' }, color: '#170035' } },
