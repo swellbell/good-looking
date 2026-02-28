@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -119,6 +120,142 @@
   .narrative-card p { font-size: 13px; line-height: 1.75; color: #170035; }
   .narrative-card strong.a { color: #1500FF; }
   .narrative-card strong.b { color: #00BC9E; }
+
+  /* ── BUBBLE CHART SECTION ── */
+  .bubble-section { margin-top: 14px; }
+
+  .bubble-controls {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+
+  .threshold-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #EAF3F9;
+    border: 1px solid #D1DDE5;
+    border-radius: 6px;
+    padding: 7px 14px;
+  }
+
+  .threshold-control label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #170035;
+    white-space: nowrap;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    width: 130px;
+    height: 4px;
+    background: #D1DDE5;
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: #1500FF;
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #1500FF;
+  }
+
+  #threshold-display {
+    font-size: 13px;
+    font-weight: 800;
+    color: #ED4F63;
+    min-width: 34px;
+  }
+
+  .ctl-hint {
+    font-size: 11px;
+    font-weight: 600;
+    color: #9FA4BC;
+  }
+
+  .bubble-legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+    align-items: center;
+  }
+
+  .bubble-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #170035;
+  }
+
+  .leg-swatch {
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .leg-dash {
+    width: 22px; height: 0;
+    border-top: 2px dashed #ED4F63;
+    flex-shrink: 0;
+  }
+
+  /* D3 SVG overrides scoped inside #bubble-wrap */
+  #bubble-wrap .tick text {
+    font-family: 'Manrope', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    fill: #9FA4BC;
+  }
+  #bubble-wrap .tick line { stroke: #DCE8F2; }
+  #bubble-wrap .domain { display: none; }
+  #bubble-wrap .bgrid line { stroke: #EAF3F9; stroke-dasharray: 4,3; }
+  #bubble-wrap .bGrid path { display: none; }
+
+  /* D3 tooltip */
+  #bubble-tooltip {
+    position: fixed;
+    background: #170035;
+    color: #fff;
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 11px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.12s;
+    min-width: 220px;
+    z-index: 200;
+    line-height: 1.8;
+    box-shadow: 0 6px 24px rgba(21,0,255,0.2);
+  }
+  #bubble-tooltip .t-name {
+    font-size: 13px; font-weight: 700; color: #00D7D9;
+    margin-bottom: 6px; display: block;
+  }
+  #bubble-tooltip .t-divider {
+    border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 6px 0;
+  }
+  #bubble-tooltip .t-row {
+    display: flex; justify-content: space-between; gap: 14px;
+    font-weight: 500; color: #aab0cc;
+  }
+  #bubble-tooltip .t-row span:last-child { color: #fff; font-weight: 700; }
+  #bubble-tooltip .t-section {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: rgba(255,255,255,0.35);
+    margin-top: 6px; margin-bottom: 2px;
+  }
 </style>
 </head>
 <body>
@@ -187,6 +324,37 @@
     <canvas id="qChart"></canvas>
   </div>
 
+  <!-- BUBBLE CHART -->
+  <div class="card bubble-section">
+    <div class="card-title">Revenue &amp; Margin Comparison — FY25 Actual vs. FY26 FCST</div>
+
+    <div class="bubble-controls">
+      <div class="threshold-control">
+        <label for="threshold-slider">Margin Threshold</label>
+        <input type="range" id="threshold-slider" min="0" max="100" value="75" step="1">
+        <span id="threshold-display">75%</span>
+      </div>
+      <span class="ctl-hint">Drag to adjust the threshold line</span>
+    </div>
+
+    <div id="bubble-wrap">
+      <svg id="bubble-chart"></svg>
+    </div>
+
+    <div class="bubble-legend">
+      <div class="bubble-legend-item">
+        <div class="leg-swatch" style="background:#1500FF;"></div>FY25 Actual
+      </div>
+      <div class="bubble-legend-item">
+        <div class="leg-swatch" style="background:#00D7D9;"></div>FY26 FCST
+      </div>
+      <div class="bubble-legend-item">
+        <div class="leg-dash"></div>Margin Threshold
+      </div>
+      <span style="font-size:10px;font-weight:500;color:#9FA4BC;margin-left:auto;">Bubble size = revenue · Margin % shown above each bubble · Revenue ($k) shown inside</span>
+    </div>
+  </div>
+
   <!-- HIGH / WATCH -->
   <div class="grid-2">
     <div class="card" style="border-top:3px solid #00BC9E;">
@@ -212,14 +380,17 @@
   <div class="narrative-card">
     <div class="card-title">P&L Narrative</div>
     <div style="margin-top:4px;">
-      <p>The portfolio has high-margin anchors (PA: 76%, DS: 68%, EA: 67%) covering for challenged products — most visibly Capture, where Mobile at 20% margin is dragging the rollup to 30%. Clear evidence of the importance of aligning roadmaps to P&L accountability, and forcing capacity tradeoffs against actual contribution margin.</p>
-
+      <p>The portfolio benefits from several strong, high-margin products that help balance areas under pressure. PA, DS, and EA all operate near or above 70% margin. Capture is performing at a lower level, with Mobile Capture around 20% margin and bringing the overall Capture margin closer to 30%. This highlights the value of keeping roadmaps closely tied to P&L accountability and making deliberate capacity choices based on contribution margin and long-term portfolio health.</p>
     </div>
   </div>
 
 </div>
 
+<!-- Tooltip lives outside container for fixed positioning -->
+<div id="bubble-tooltip"></div>
+
 <script>
+/* ── P&L TABLE DATA ── */
 const PL_TOP = [
   { name:'Professional Archive', short:'Prof Archive',  rev:104372, exp:24771, profit:79601, margin:76.3, budget:104452, fy25:94119,  q:[24833,25350,26581,27608] },
   { name:'Business Solutions',   short:'Biz Solutions', rev:11162,  exp:6664,  profit:4498,  margin:40.3, budget:11523,  fy25:12346,  q:[2889,2813,2762,2699]    },
@@ -276,12 +447,11 @@ PL_TOP.forEach(p => {
   if (p.name === 'Capture') CAPTURE_CHILDREN.forEach(c => { tbody.innerHTML += buildRow(c, true); });
 });
 
-// ── CHART.JS DATALABELS PLUGIN (inline — no CDN needed) ──
-// Registers a minimal datalabels plugin directly
+/* ── CHART.JS PLUGINS ── */
 const dataLabelsPlugin = {
   id: 'customLabels',
   afterDatasetsDraw(chart) {
-    const { ctx, chartArea } = chart;
+    const { ctx } = chart;
     chart.data.datasets.forEach((dataset, di) => {
       const meta = chart.getDatasetMeta(di);
       if (meta.hidden) return;
@@ -293,30 +463,23 @@ const dataLabelsPlugin = {
         ctx.fillStyle = '#ffffff';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-
         const type = chart.config.type;
-
         if (type === 'bar' && chart.options.indexAxis === 'y') {
-          // Horizontal bar — label inside if wide enough, else outside
-          const x = bar.x;
-          const y = bar.y;
           const w = bar.x - bar.base;
           const label = val + '%';
           if (w > 40) {
             ctx.fillStyle = '#ffffff';
-            ctx.fillText(label, bar.base + w / 2, y);
+            ctx.fillText(label, bar.base + w / 2, bar.y);
           } else {
             ctx.fillStyle = '#170035';
             ctx.textAlign = 'left';
-            ctx.fillText(label, x + 5, y);
+            ctx.fillText(label, bar.x + 5, bar.y);
           }
         } else if (type === 'bar') {
-          // Vertical stacked bar — only label segments tall enough
           const h = Math.abs(bar.y - bar.base);
           if (h > 18) {
-            const label = '$' + (val / 1000).toFixed(0) + 'M';
             ctx.fillStyle = '#ffffff';
-            ctx.fillText(label, bar.x, bar.y + h / 2);
+            ctx.fillText('$' + (val / 1000).toFixed(0) + 'M', bar.x, bar.y + h / 2);
           }
         }
         ctx.restore();
@@ -325,7 +488,6 @@ const dataLabelsPlugin = {
   }
 };
 
-// Doughnut label plugin — draws value + % on each slice
 const doughnutLabels = {
   id: 'doughnutLabels',
   afterDatasetsDraw(chart) {
@@ -333,28 +495,20 @@ const doughnutLabels = {
     const { ctx } = chart;
     const meta = chart.getDatasetMeta(0);
     const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-
     meta.data.forEach((arc, i) => {
       const val  = chart.data.datasets[0].data[i];
       const pct  = (val / total * 100).toFixed(0);
-      const label = '$' + (val / 1000).toFixed(0) + 'M';
-
-      // Only label slices big enough (>7%)
       if (parseFloat(pct) < 7) return;
-
-      const angle    = arc.startAngle + (arc.endAngle - arc.startAngle) / 2;
-      const outerR   = arc.outerRadius;
-      const innerR   = arc.innerRadius;
-      const midR     = (outerR + innerR) / 2;
-      const cx       = arc.x + Math.cos(angle) * midR;
-      const cy       = arc.y + Math.sin(angle) * midR;
-
+      const angle = arc.startAngle + (arc.endAngle - arc.startAngle) / 2;
+      const midR  = (arc.outerRadius + arc.innerRadius) / 2;
+      const cx    = arc.x + Math.cos(angle) * midR;
+      const cy    = arc.y + Math.sin(angle) * midR;
       ctx.save();
       ctx.font = "700 11px 'Manrope', sans-serif";
       ctx.fillStyle = '#ffffff';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(label, cx, cy - 6);
+      ctx.fillText('$' + (val / 1000).toFixed(0) + 'M', cx, cy - 6);
       ctx.font = "500 10px 'Manrope', sans-serif";
       ctx.fillText(pct + '%', cx, cy + 7);
       ctx.restore();
@@ -366,54 +520,33 @@ window.addEventListener('load', () => {
   Chart.defaults.font.family = "'Manrope', sans-serif";
   Chart.defaults.color       = '#9FA4BC';
   Chart.defaults.borderColor = '#D1DDE5';
-
   Chart.register(dataLabelsPlugin, doughnutLabels);
 
   const byMargin = [...PL_TOP].sort((a, b) => b.margin - a.margin);
 
-  // ── DOUGHNUT: Revenue mix ──
   new Chart(document.getElementById('revChart'), {
     type: 'doughnut',
     data: {
       labels: PL_TOP.map(p => p.short),
-      datasets: [{
-        data: PL_TOP.map(p => p.rev),
-        backgroundColor: PALETTE,
-        borderColor: '#ffffff',
-        borderWidth: 2,
-        hoverOffset: 6
-      }]
+      datasets: [{ data: PL_TOP.map(p => p.rev), backgroundColor: PALETTE, borderColor: '#ffffff', borderWidth: 2, hoverOffset: 6 }]
     },
     options: {
-      responsive: true,
-      cutout: '55%',
+      responsive: true, cutout: '55%',
       plugins: {
-        legend: {
-          position: 'right',
-          labels: { font: { size: 11, weight: '600' }, padding: 10, boxWidth: 12, color: '#170035' }
-        },
-        tooltip: {
-          callbacks: { label: ctx => ` $${(ctx.parsed / 1000).toFixed(1)}M (${(ctx.parsed / 383641 * 100).toFixed(1)}%)` }
-        }
+        legend: { position: 'right', labels: { font: { size: 11, weight: '600' }, padding: 10, boxWidth: 12, color: '#170035' } },
+        tooltip: { callbacks: { label: ctx => ` $${(ctx.parsed / 1000).toFixed(1)}M (${(ctx.parsed / 383641 * 100).toFixed(1)}%)` } }
       }
     }
   });
 
-  // ── HORIZONTAL BAR: Margin ranked ──
   new Chart(document.getElementById('marginChart'), {
     type: 'bar',
     data: {
       labels: byMargin.map(p => p.short),
-      datasets: [{
-        data: byMargin.map(p => p.margin),
-        backgroundColor: byMargin.map(p => mColor(p.margin)),
-        borderRadius: 4,
-        borderWidth: 0
-      }]
+      datasets: [{ data: byMargin.map(p => p.margin), backgroundColor: byMargin.map(p => mColor(p.margin)), borderRadius: 4, borderWidth: 0 }]
     },
     options: {
-      indexAxis: 'y',
-      responsive: true,
+      indexAxis: 'y', responsive: true,
       layout: { padding: { right: 40 } },
       plugins: {
         legend: { display: false },
@@ -426,83 +559,276 @@ window.addEventListener('load', () => {
     }
   });
 
-  // ── STACKED BAR: Quarterly ──
-  // Build datasets — one per product, each labelled
   const qDatasets = PL_TOP.map((p, i) => ({
-    label: p.short,
-    data: p.q,
-    backgroundColor: PALETTE[i],
-    borderWidth: 0,
-    borderRadius: 0
+    label: p.short, data: p.q,
+    backgroundColor: PALETTE[i], borderWidth: 0, borderRadius: 0
   }));
 
   new Chart(document.getElementById('qChart'), {
     type: 'bar',
-    data: {
-      labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-      datasets: qDatasets
-    },
+    data: { labels: ['Q1', 'Q2', 'Q3', 'Q4'], datasets: qDatasets },
     options: {
       responsive: true,
       plugins: {
-        legend: {
-          position: 'right',
-          labels: { font: { size: 11, weight: '600' }, padding: 8, boxWidth: 12, color: '#170035' }
-        },
+        legend: { position: 'right', labels: { font: { size: 11, weight: '600' }, padding: 8, boxWidth: 12, color: '#170035' } },
         tooltip: {
           mode: 'index',
           callbacks: {
             label: ctx => ` ${ctx.dataset.label}: $${(ctx.parsed.y / 1000).toFixed(1)}M`,
-            footer: items => {
-              const total = items.reduce((s, i) => s + i.parsed.y, 0);
-              return 'Total: $' + (total / 1000).toFixed(1) + 'M';
-            }
+            footer: items => 'Total: $' + (items.reduce((s, i) => s + i.parsed.y, 0) / 1000).toFixed(1) + 'M'
           }
         }
       },
       scales: {
         x: { stacked: true, grid: { display: false }, ticks: { font: { size: 12, weight: '600' }, color: '#170035' } },
-        y: {
-          stacked: true,
-          ticks: { callback: v => '$' + (v / 1000).toFixed(0) + 'M', font: { size: 11 } },
-          grid: { color: '#EAF3F9' }
-        }
+        y: { stacked: true, ticks: { callback: v => '$' + (v / 1000).toFixed(0) + 'M', font: { size: 11 } }, grid: { color: '#EAF3F9' } }
       }
     }
   });
 
-  // ── QUARTERLY: add total labels on top of each stacked bar ──
-  // Uses a second pass after charts render
-  const qCanvas = document.getElementById('qChart');
-  const qChartInstance = Chart.getChart(qCanvas);
-
-  // Add a one-time afterRender to draw Q totals above bars
   const qTotalPlugin = {
     id: 'qTotals',
     afterDraw(chart) {
       if (chart.canvas.id !== 'qChart') return;
       const { ctx, scales: { x, y } } = chart;
-      const quarters = ['Q1','Q2','Q3','Q4'];
-      const totals = quarters.map((_, qi) =>
-        PL_TOP.reduce((sum, p) => sum + p.q[qi], 0)
-      );
-
+      const totals = ['Q1','Q2','Q3','Q4'].map((_, qi) => PL_TOP.reduce((sum, p) => sum + p.q[qi], 0));
       ctx.save();
       ctx.font = "700 11px 'Manrope', sans-serif";
       ctx.fillStyle = '#170035';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'bottom';
-
       x.ticks.forEach((tick, i) => {
-        const xPos = x.getPixelForTick(i);
-        const yPos = y.getPixelForValue(totals[i]);
-        ctx.fillText('$' + (totals[i] / 1000).toFixed(0) + 'M', xPos, yPos - 4);
+        ctx.fillText('$' + (totals[i] / 1000).toFixed(0) + 'M', x.getPixelForTick(i), y.getPixelForValue(totals[i]) - 4);
       });
       ctx.restore();
     }
   };
   Chart.register(qTotalPlugin);
-  if (qChartInstance) qChartInstance.update();
+  Chart.getChart('qChart')?.update();
+
+  /* ── BUBBLE CHART (D3) ── */
+  const bubbleData = [
+    { name: "Professional Archive", short: "Pro Archive",   rev25: 94119,  rev26: 104372, margin25: 0.76, margin26: 0.763 },
+    { name: "Business Solutions",   short: "Biz Solutions", rev25: 12346,  rev26: 11162,  margin25: 0.40, margin26: 0.403 },
+    { name: "Enterprise Archive",   short: "Ent Archive",   rev25: 81509,  rev26: 106938, margin25: 0.61, margin26: 0.672 },
+    { name: "Capture",              short: "Capture",       rev25: 72212,  rev26: 55879,  margin25: 0.48, margin26: 0.30  },
+    { name: "Conduct",              short: "Conduct",       rev25: 43444,  rev26: 39195,  margin25: 0.40, margin26: 0.239 },
+    { name: "Digital Safe",         short: "Digital Safe",  rev25: 80681,  rev26: 66095,  margin25: 0.72, margin26: 0.685 },
+  ];
+
+  const PRIMARY = "#1500FF";
+  const TEAL1   = "#00D7D9";
+  const RED     = "#ED4F63";
+
+  const wrap     = document.getElementById('bubble-wrap');
+  const totalW   = wrap.clientWidth;
+  const BW       = totalW - 4;
+  const BH       = Math.round(BW * 0.50);
+  const BM       = { top: 36, right: 52, bottom: 76, left: 54 };
+  const iW       = BW - BM.left - BM.right;
+  const iH       = BH - BM.top - BM.bottom;
+
+  const svg = d3.select('#bubble-chart')
+    .attr('width', BW)
+    .attr('height', BH);
+
+  const g = svg.append('g').attr('transform', `translate(${BM.left},${BM.top})`);
+
+  const products = bubbleData.map(d => d.name);
+  const bandW    = iW / products.length;
+  const offset   = bandW * 0.17;
+
+  const allRevs  = bubbleData.flatMap(d => [d.rev25, d.rev26]);
+  const rScale   = d3.scaleSqrt().domain([0, d3.max(allRevs)]).range([10, 42]);
+  const yScale   = d3.scaleLinear().domain([0, 1]).range([iH, 0]);
+
+  function bx(name) {
+    return (products.indexOf(name) + 0.5) * bandW;
+  }
+
+  // Horizontal grid
+  g.append('g').attr('class', 'bGrid')
+    .call(d3.axisLeft(yScale).tickSize(-iW).tickFormat('').ticks(5))
+    .selectAll('line').attr('stroke', '#EAF3F9').attr('stroke-dasharray', '4,3');
+  g.select('.bGrid .domain').remove();
+
+  // Y axis
+  g.append('g')
+    .call(d3.axisLeft(yScale).ticks(5).tickFormat(d => `${(d*100).toFixed(0)}%`))
+    .selectAll('text')
+    .attr('font-family', 'Manrope, sans-serif')
+    .attr('font-size', 10)
+    .attr('font-weight', 600)
+    .attr('fill', '#9FA4BC');
+
+  // Y label
+  svg.append('text')
+    .attr('transform', 'rotate(-90)')
+    .attr('x', -(BM.top + iH / 2))
+    .attr('y', 14)
+    .attr('text-anchor', 'middle')
+    .attr('font-family', 'Manrope, sans-serif')
+    .attr('font-size', 10)
+    .attr('font-weight', 700)
+    .attr('fill', '#9FA4BC')
+    .attr('letter-spacing', '0.08em')
+    .text('PRODUCT MARGIN');
+
+  // Band separators
+  bubbleData.forEach((d, i) => {
+    if (i > 0) {
+      g.append('line')
+        .attr('x1', i * bandW).attr('x2', i * bandW)
+        .attr('y1', 0).attr('y2', iH)
+        .attr('stroke', '#EAF3F9')
+        .attr('stroke-width', 1);
+    }
+  });
+
+  // Threshold line
+  let threshold = 0.75;
+
+  const threshLine = g.append('line')
+    .attr('x1', 0).attr('x2', iW)
+    .attr('y1', yScale(threshold)).attr('y2', yScale(threshold))
+    .attr('stroke', RED)
+    .attr('stroke-width', 1.5)
+    .attr('stroke-dasharray', '5,4')
+    .attr('opacity', 0.85);
+
+  const threshPill = g.append('rect')
+    .attr('x', iW + 4)
+    .attr('y', yScale(threshold) - 9)
+    .attr('width', 36).attr('height', 15)
+    .attr('fill', RED).attr('rx', 3);
+
+  const threshLabel = g.append('text')
+    .attr('x', iW + 22)
+    .attr('y', yScale(threshold) + 3.5)
+    .attr('font-family', 'Manrope, sans-serif')
+    .attr('font-size', 9).attr('font-weight', 800)
+    .attr('fill', '#fff').attr('text-anchor', 'middle')
+    .text('75%');
+
+  // Product groups
+  const tooltip = document.getElementById('bubble-tooltip');
+  const groups  = g.selectAll('.pg').data(bubbleData).enter().append('g').attr('class', 'pg');
+
+  // Connector
+  groups.append('line')
+    .attr('x1', d => bx(d.name) - offset).attr('y1', d => yScale(d.margin25))
+    .attr('x2', d => bx(d.name) + offset).attr('y2', d => yScale(d.margin26))
+    .attr('stroke', '#C6C9E0').attr('stroke-width', 1.2).attr('stroke-dasharray', '3,3');
+
+  // FY25 circles
+  groups.append('circle')
+    .attr('cx', d => bx(d.name) - offset).attr('cy', d => yScale(d.margin25))
+    .attr('r', d => rScale(d.rev25))
+    .attr('fill', PRIMARY).attr('fill-opacity', 0.13)
+    .attr('stroke', PRIMARY).attr('stroke-width', 2)
+    .style('cursor', 'pointer');
+
+  // FY25 revenue label
+  groups.append('text')
+    .attr('x', d => bx(d.name) - offset).attr('y', d => yScale(d.margin25) + 1)
+    .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
+    .attr('font-family', 'Manrope, sans-serif').attr('font-size', 9).attr('font-weight', 700)
+    .attr('fill', PRIMARY).attr('pointer-events', 'none')
+    .text(d => `$${(d.rev25/1000).toFixed(0)}k`);
+
+  // FY26 circles
+  groups.append('circle')
+    .attr('cx', d => bx(d.name) + offset).attr('cy', d => yScale(d.margin26))
+    .attr('r', d => rScale(d.rev26))
+    .attr('fill', TEAL1).attr('fill-opacity', 0.16)
+    .attr('stroke', TEAL1).attr('stroke-width', 2)
+    .style('cursor', 'pointer');
+
+  // FY26 revenue label
+  groups.append('text')
+    .attr('x', d => bx(d.name) + offset).attr('y', d => yScale(d.margin26) + 1)
+    .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
+    .attr('font-family', 'Manrope, sans-serif').attr('font-size', 9).attr('font-weight', 700)
+    .attr('fill', '#007a7b').attr('pointer-events', 'none')
+    .text(d => `$${(d.rev26/1000).toFixed(0)}k`);
+
+  // Margin % labels above each bubble
+  groups.each(function(d) {
+    const grp = d3.select(this);
+    const cx25 = bx(d.name) - offset, cx26 = bx(d.name) + offset;
+    const r25  = rScale(d.rev25),      r26  = rScale(d.rev26);
+
+    [{ cx: cx25, cy: yScale(d.margin25), r: r25, val: d.margin25 },
+     { cx: cx26, cy: yScale(d.margin26), r: r26, val: d.margin26 }].forEach(b => {
+      grp.append('text')
+        .attr('x', b.cx).attr('y', b.cy - b.r - 5)
+        .attr('text-anchor', 'middle')
+        .attr('font-family', 'Manrope, sans-serif').attr('font-size', 9).attr('font-weight', 700)
+        .attr('fill', '#9FA4BC').attr('pointer-events', 'none')
+        .text(`${(b.val * 100).toFixed(0)}%`);
+    });
+  });
+
+  // Product name labels below
+  bubbleData.forEach(d => {
+    const cx    = bx(d.name);
+    const words = d.short.split(' ');
+    const baseY = iH + 18;
+
+    if (words.length === 1) {
+      g.append('text')
+        .attr('x', cx).attr('y', baseY + 4)
+        .attr('text-anchor', 'middle')
+        .attr('font-family', 'Manrope, sans-serif').attr('font-size', 11).attr('font-weight', 700)
+        .attr('fill', '#170035').text(d.short);
+    } else {
+      words.forEach((w, i) => {
+        g.append('text')
+          .attr('x', cx).attr('y', baseY + i * 14)
+          .attr('text-anchor', 'middle')
+          .attr('font-family', 'Manrope, sans-serif').attr('font-size', 11).attr('font-weight', 700)
+          .attr('fill', '#170035').text(w);
+      });
+    }
+
+    g.append('line')
+      .attr('x1', cx).attr('x2', cx)
+      .attr('y1', iH).attr('y2', iH + 5)
+      .attr('stroke', '#D1DDE5').attr('stroke-width', 1);
+  });
+
+  // Tooltip
+  function showTip(event, d) {
+    const delta    = ((d.margin26 - d.margin25) * 100).toFixed(0);
+    const sign     = delta > 0 ? '+' : '';
+    const revChg   = (((d.rev26 - d.rev25) / d.rev25) * 100).toFixed(1);
+    const revSign  = revChg > 0 ? '+' : '';
+    tooltip.innerHTML = `
+      <span class="t-name">${d.name}</span>
+      <div class="t-section">Revenue</div>
+      <div class="t-row"><span>FY25 Actual</span><span>$${d.rev25.toLocaleString()}</span></div>
+      <div class="t-row"><span>FY26 FCST</span><span>$${d.rev26.toLocaleString()} (${revSign}${revChg}%)</span></div>
+      <hr class="t-divider">
+      <div class="t-section">Margin</div>
+      <div class="t-row"><span>FY25 Actual</span><span>${(d.margin25*100).toFixed(1)}%</span></div>
+      <div class="t-row"><span>FY26 FCST</span><span>${(d.margin26*100).toFixed(1)}% (${sign}${delta}pp)</span></div>
+    `;
+    tooltip.style.opacity = 1;
+    tooltip.style.left = (event.clientX + 16) + 'px';
+    tooltip.style.top  = (event.clientY + 16) + 'px';
+  }
+
+  groups.on('mousemove', showTip).on('mouseleave', () => { tooltip.style.opacity = 0; });
+
+  // Threshold slider
+  document.getElementById('threshold-slider').addEventListener('input', function() {
+    threshold = this.value / 100;
+    document.getElementById('threshold-display').textContent = this.value + '%';
+    const y = yScale(threshold);
+    threshLine.attr('y1', y).attr('y2', y);
+    threshPill.attr('y', y - 9);
+    threshLabel.attr('y', y + 3.5).text(this.value + '%');
+  });
 });
 </script>
 </body>
