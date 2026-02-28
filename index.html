@@ -270,7 +270,7 @@
     <div class="stat-chip"><span class="num">$383.6M</span><span class="label">Total Revenue (FCST)</span></div>
     <div class="stat-chip"><span class="num">$156.2M</span><span class="label">Total Expenses (FCST)</span></div>
     <div class="stat-chip"><span class="num">$227.4M</span><span class="label">Total Profit (FCST)</span></div>
-    <div class="stat-chip"><span class="num">59.3%</span><span class="label">Overall Margin (FCST)</span></div>
+    <div class="stat-chip"><span class="num">59.3%</span><span class="label">Overall Product Margin (FCST)</span></div>
     <div class="stat-chip"><span class="num" style="color:#00BC9E;">+$500K</span><span class="label">Revenue vs. Budget</span></div>
   </div>
   <p class="footnote"><span>↳</span> Totals reflect 6 top-level products. Mobile &amp; Desktop are sub-components of Capture and are excluded to avoid double-counting.</p>
@@ -285,10 +285,10 @@
           <th>Revenue</th>
           <th>Expenses</th>
           <th>Profit</th>
-          <th>Margin</th>
+          <th>Product Margin</th>
           <th>vs Budget</th>
           <th>YoY Rev</th>
-          <th style="text-align:left;width:110px;">Margin</th>
+          <th style="text-align:left;width:110px;">Product Margin</th>
         </tr>
       </thead>
       <tbody id="pl-tbody"></tbody>
@@ -314,7 +314,7 @@
       <canvas id="revChart"></canvas>
     </div>
     <div class="card">
-      <div class="card-title">Margin by Product — FY26 FCST</div>
+      <div class="card-title">Product Margin by Product — FY26 FCST</div>
       <canvas id="marginChart"></canvas>
     </div>
   </div>
@@ -326,11 +326,11 @@
 
   <!-- BUBBLE CHART -->
   <div class="card bubble-section">
-    <div class="card-title">Revenue &amp; Margin Comparison — FY25 Actual vs. FY26 FCST</div>
+    <div class="card-title">Revenue &amp; Product Margin Comparison — FY25 Actual vs. FY26 FCST</div>
 
     <div class="bubble-controls">
       <div class="threshold-control">
-        <label for="threshold-slider">Margin Threshold</label>
+        <label for="threshold-slider">Product Margin Threshold</label>
         <input type="range" id="threshold-slider" min="0" max="100" value="75" step="1">
         <span id="threshold-display">75%</span>
       </div>
@@ -349,7 +349,7 @@
         <div class="leg-swatch" style="background:#00D7D9;"></div>FY26 FCST
       </div>
       <div class="bubble-legend-item">
-        <div class="leg-dash"></div>Margin Threshold
+        <div class="leg-dash"></div>Product Margin Threshold
       </div>
       <span style="font-size:10px;font-weight:500;color:#9FA4BC;margin-left:auto;">Bubble size = revenue · Margin % shown above each bubble · Revenue ($k) shown inside</span>
     </div>
